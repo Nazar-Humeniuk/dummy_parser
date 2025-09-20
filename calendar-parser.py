@@ -27,7 +27,7 @@ def parse_days(csv_data, start_row_index, start_column_index):
             if i >= start_column_index and col]
 
 
-def parse_employees(data, start_row_index, days_start_index):
+def parse_employees(data, start_row_index, days_start_index, special_leave=False, national_holidays=False):
     """Parse employee holiday/sick leave information."""
     ATTRIBUTES = [
         "requested_holiday",
@@ -57,6 +57,16 @@ def parse_employees(data, start_row_index, days_start_index):
         employees[employee].update({
             "holidays": len(employees[employee]["approved_holiday"]),
             "sick": len(employees[employee]["sick_leave"]),
+        })
+
+        if special_leave:
+             employees[employee].update({
+                 "special-leave": len(employees[employee]["special_leave"])
+        })
+
+        if national_holidays:
+             employees[employee].update({
+                 "national-holidays": len(employees[employee]["national_holiday"])
         })
 
     return employees
@@ -108,7 +118,12 @@ if __name__ == "__main__":
         date_start_row, date_start_column = find_Date(calendar_data)
         employee_start_row = date_start_row + 2
         days = parse_days(calendar_data, start_row_index=date_start_row, start_column_index=date_start_column)
-        employees = parse_employees(calendar_data, start_row_index=employee_start_row, days_start_index=date_start_column)
+        employees = parse_employees(
+            calendar_data,
+            start_row_index=employee_start_row,
+            days_start_index=date_start_column,
+            special_leave=True
+        )
         employees = convert_dates(employees, days, year)
         save_json(employees)
     except ReferenceError as ex:
