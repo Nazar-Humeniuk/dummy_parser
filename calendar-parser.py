@@ -100,8 +100,8 @@ def save_json(employees: dict, file_name="employees_data.json"):
 # ----------------------
 if __name__ == "__main__":
     # requrements
-    file_name = ""
-    year = ""
+    file_name = "" # path to your csv file
+    year = "" # year of calendar
 
     if not (file_name and year):
         raise ReferenceError("Missing required arguments: file_name and year")
