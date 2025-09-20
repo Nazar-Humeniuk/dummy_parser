@@ -15,15 +15,15 @@
 
 ```json
 {
-    employee_name {
-        "requested_holiday": list,
-        "national_holiday": list,
-        "special_leave": list,
-        "sick_leave": list,
-        "holidays": int,
-        "sick": int,
-        "special leave": int,
-        "national holiday": int
+    "employee_name" {
+        "requested_holiday": "<list>",
+        "national_holiday": "<list>",
+        "special_leave": "<list>",
+        "sick_leave": "<list>",
+        "holidays": "<int>",
+        "sick": "<int>",
+        "special leave": "<int>",
+        "national holiday": "<int>"
     }
 }
 ```
