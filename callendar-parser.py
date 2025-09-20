@@ -98,13 +98,18 @@ def save_json(employees: dict, file_name="employees_data.json"):
 # Main execution
 # ----------------------
 if __name__ == "__main__":
-    calendar_data = open_csv_calendar("2022_MPO_Holiday_Planner.csv")
-    date_start_row, date_start_column = find_Date(calendar_data)
-    employee_start_row = date_start_row + 2
-   # print(employee_start_row)
-    # print(calendar_data)
-    days = parse_days(calendar_data, start_row_index=date_start_row, start_column_index=date_start_column)
-    #print(days)
-    employees = parse_employees(calendar_data, start_row_index=employee_start_row, days_start_index=date_start_column)
-    employees = convert_dates(employees, days, "2022")
-    save_json(employees)
+    file_name = ""
+    year = ""
+
+    if not (file_name and year):
+        raise ReferenceError("Missing required arguments: file_name and year")
+    try:
+        calendar_data = open_csv_calendar(file_name)
+        date_start_row, date_start_column = find_Date(calendar_data)
+        employee_start_row = date_start_row + 2
+        days = parse_days(calendar_data, start_row_index=date_start_row, start_column_index=date_start_column)
+        employees = parse_employees(calendar_data, start_row_index=employee_start_row, days_start_index=date_start_column)
+        employees = convert_dates(employees, days, year)
+        save_json(employees)
+    except ReferenceError as ex:
+        print(ex)
