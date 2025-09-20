@@ -12,11 +12,27 @@
 **Script parse only csv extension files**
 
 # The data will be in the next JSON format:
+
 ``
 {
     employee_name {
-        
+        "requested_holiday": list,
+        "national_holiday": list,
+        "special_leave": list,
+        "sick_leave": list,
+        "holidays": int,
+        "sick": int,
+        "special leave": int,
+        "national holiday": int
     }
 }
 ``
+
+### You can add or revome values such as:
+- holidays
+- sick
+- special_leave
+- national holiday
+
+Set them to value False in the **main** function
 

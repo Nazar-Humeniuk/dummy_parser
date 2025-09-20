@@ -27,7 +27,15 @@ def parse_days(csv_data, start_row_index, start_column_index):
             if i >= start_column_index and col]
 
 
-def parse_employees(data, start_row_index, days_start_index, special_leave=False, national_holidays=False):
+def parse_employees(
+        data,
+        start_row_index,
+        days_start_index,
+        approved_holiday=False,
+        sick_leave=False,
+        special_leave=False,
+        national_holiday=False
+    ):
     """Parse employee holiday/sick leave information."""
     ATTRIBUTES = [
         "requested_holiday",
@@ -54,9 +62,14 @@ def parse_employees(data, start_row_index, days_start_index, special_leave=False
                 case "s": employees[employee]["special_leave"].append(idx)
                 case "z": employees[employee]["sick_leave"].append(idx)
 
-        employees[employee].update({
-            "holidays": len(employees[employee]["approved_holiday"]),
-            "sick": len(employees[employee]["sick_leave"]),
+
+        if approved_holiday:
+            employees[employee].update({
+                 "holidays": len(employees[employee]["approved_holiday"])
+        })
+        if sick_leave:
+            employees[employee].update({
+                 "sick": len(employees[employee]["sick_leave"])
         })
 
         if special_leave:
@@ -64,9 +77,9 @@ def parse_employees(data, start_row_index, days_start_index, special_leave=False
                  "special-leave": len(employees[employee]["special_leave"])
         })
 
-        if national_holidays:
+        if national_holiday:
              employees[employee].update({
-                 "national-holidays": len(employees[employee]["national_holiday"])
+                 "national-holiday": len(employees[employee]["national_holiday"])
         })
 
     return employees
@@ -111,6 +124,12 @@ if __name__ == "__main__":
     file_name = "" # path to your csv file
     year = "" # year of calendar
 
+    # optional
+    approved_holiday    = True
+    sick_leave          = True
+    special_leave       = True
+    national_holiday    = False
+
     if not (file_name and year):
         raise ReferenceError("Missing required arguments: file_name and year")
     try:
@@ -122,7 +141,10 @@ if __name__ == "__main__":
             calendar_data,
             start_row_index=employee_start_row,
             days_start_index=date_start_column,
-            special_leave=True
+            approved_holiday=approved_holiday,
+            sick_leave=sick_leave,
+            special_leave=special_leave,
+            national_holiday=national_holiday
         )
         employees = convert_dates(employees, days, year)
         save_json(employees)
