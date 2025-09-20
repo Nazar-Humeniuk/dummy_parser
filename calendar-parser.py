@@ -13,6 +13,7 @@ def open_csv_calendar(file_name: str):
 
 
 def find_Date(csv_data):
+    """Find 'Date' in csv as reference point"""
     for row, data in enumerate(csv_data):
         if "Date" in data:
             column = data.index("Date")
@@ -98,6 +99,7 @@ def save_json(employees: dict, file_name="employees_data.json"):
 # Main execution
 # ----------------------
 if __name__ == "__main__":
+    # requrements
     file_name = ""
     year = ""
 
