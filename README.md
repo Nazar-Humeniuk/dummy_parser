@@ -9,6 +9,6 @@
 ``python calendar-parser.py``
 
 ## Important!
-> Script parse only csv extension files
+**Script parse only csv extension files**
 
 
