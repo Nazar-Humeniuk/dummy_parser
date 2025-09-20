@@ -11,9 +11,9 @@
 ## Important!
 **Script parse only csv extension files**
 
-# The data will be in the next JSON format:
+## The data will be in the next JSON format:
 
-``
+```json
 {
     employee_name {
         "requested_holiday": list,
@@ -26,7 +26,7 @@
         "national holiday": int
     }
 }
-``
+```
 
 ### You can add or revome values such as:
 - holidays
