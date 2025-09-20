@@ -11,4 +11,12 @@
 ## Important!
 **Script parse only csv extension files**
 
+# The data will be in the next JSON format:
+``
+{
+    employee_name {
+        
+    }
+}
+``
 

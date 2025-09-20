@@ -38,8 +38,6 @@ def parse_employees(data, start_row_index, days_start_index):
     ]
 
     employee_name_index = 1
-    hdays_index = 2
-    sick_index = 3
 
     employees = defaultdict(lambda: {attr: [] for attr in ATTRIBUTES})
 
@@ -48,11 +46,6 @@ def parse_employees(data, start_row_index, days_start_index):
         if not employee:
             continue
 
-        employees[employee].update({
-            "hdays": row[hdays_index],
-            "sick": row[sick_index],
-        })
-
         for idx, cell in enumerate(row[days_start_index:]):
             match cell.lower():
                 case "r": employees[employee]["requested_holiday"].append(idx)
@@ -60,6 +53,11 @@ def parse_employees(data, start_row_index, days_start_index):
                 case "n": employees[employee]["national_holiday"].append(idx)
                 case "s": employees[employee]["special_leave"].append(idx)
                 case "z": employees[employee]["sick_leave"].append(idx)
+
+        employees[employee].update({
+            "holidays": len(employees[employee]["approved_holiday"]),
+            "sick": len(employees[employee]["sick_leave"]),
+        })
 
     return employees
 
@@ -114,4 +112,4 @@ if __name__ == "__main__":
         employees = convert_dates(employees, days, year)
         save_json(employees)
     except ReferenceError as ex:
-        print(ex)
+        pass
