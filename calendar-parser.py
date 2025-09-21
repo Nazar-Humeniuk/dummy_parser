@@ -1,3 +1,4 @@
+import os
 import csv
 import json
 from collections import defaultdict
@@ -111,18 +112,20 @@ def convert_dates(employees: dict, days: list, year: str):
 
     return employees
 
-def save_json(employees: dict, file_name="employees_data.json"):
+def save_json(employees: dict, save_path, save_folder="results"):
     """Save employees data to a JSON file."""
-    with open(file_name, mode='w', encoding='utf-8') as json_file:
+    if not os.path.exists(save_folder):
+        os.mkdir(save_folder)
+
+    file_name = save_path.split('/')
+    file_name = file_name[len(file_name)-1].split('.')[0]
+    with open("results/"+file_name+".json", mode='w', encoding='utf-8') as json_file:
         json.dump(employees, json_file, indent=4)
 
-# ----------------------
-# Main execution
-# ----------------------
-if __name__ == "__main__":
+def execution():
     # requrements
-    file_name = "" # path to your csv file
-    year = "" # year of calendar
+    path = "files/" # path to your csv file or to folder
+    year = [] # year of calendar
 
     # optional
     approved_holiday    = True
@@ -130,23 +133,56 @@ if __name__ == "__main__":
     special_leave       = True
     national_holiday    = False
 
-    if not (file_name and year):
-        raise ReferenceError("Missing required arguments: file_name and year")
+    # save paramenters
+    is_save = True
+    save_folder = "results"
+
+    # save data
+    all_employees_data = {}
+
+    if not (path):
+        raise ReferenceError("Missing required arguments: path")
     try:
-        calendar_data = open_csv_calendar(file_name)
-        date_start_row, date_start_column = find_Date(calendar_data)
-        employee_start_row = date_start_row + 2
-        days = parse_days(calendar_data, start_row_index=date_start_row, start_column_index=date_start_column)
-        employees = parse_employees(
-            calendar_data,
-            start_row_index=employee_start_row,
-            days_start_index=date_start_column,
-            approved_holiday=approved_holiday,
-            sick_leave=sick_leave,
-            special_leave=special_leave,
-            national_holiday=national_holiday
-        )
-        employees = convert_dates(employees, days, year)
-        save_json(employees)
-    except ReferenceError as ex:
+        csv_files = []
+        if os.path.isdir(path):
+            csv_files = [path+'/'+f for f in os.listdir(path) if os.path.isfile(path+'/'+f) and
+                            f.endswith('csv')]
+            year = [file.split('/')[-1].split('_')[0] for file in csv_files]
+        elif os.path.isfile(path) and path.endswith("csv"):
+            csv_files.append(path)
+            year.append(csv_files[0].split('/')[1].split('_')[0])
+        else:
+            raise ValueError("Wrong file or directory format!")
+        for index, csv_file in enumerate(csv_files):
+            calendar_data = open_csv_calendar(csv_file)
+            date_start_row, date_start_column = find_Date(calendar_data)
+            employee_start_row = date_start_row + 2
+            days = parse_days(calendar_data, start_row_index=date_start_row, start_column_index=date_start_column)
+            employees = parse_employees(
+                calendar_data,
+                start_row_index=employee_start_row,
+                days_start_index=date_start_column,
+                approved_holiday=approved_holiday,
+                sick_leave=sick_leave,
+                special_leave=special_leave,
+                national_holiday=national_holiday
+            )
+
+            employees = convert_dates(employees, days, year[index])
+
+            if is_save:
+                save_json(employees, save_path=csv_file, save_folder=save_folder)
+
+            # uncomment if you are going to use this code to working with data farther
+            # all_employees_data[year[index]] = employees
+        # return all_employees_data
+    except ReferenceError:
         pass
+    except ValueError:
+        pass
+
+# ----------------------
+# Main execution
+# ----------------------
+if __name__ == "__main__":
+    execution()
