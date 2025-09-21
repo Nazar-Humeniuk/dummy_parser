@@ -123,7 +123,7 @@ def save_json(employees: dict, save_path, save_folder="results"):
         json.dump(employees, json_file, indent=4)
 
 def execution():
-    # requrements
+    # requirements
     path = "files/" # path to your csv file or to folder
     year = [] # year of calendar
 
