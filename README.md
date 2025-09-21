@@ -43,3 +43,22 @@ You can set folder where you want to save file by ovewriting variable **save_fol
 If you don't want save data to files then ovewrite valiable **is_save** to __False__ in **execution** fucntion.
 
 If you are going to use this code to work pass this data to database, please **uncomment** last part of execution function. Then the data will be returned as result of the function.
+
+Then the result dictionary variable will look like:
+
+```json
+{
+    "year_of_calendar": {
+        "employee_name" {
+            "requested_holiday": "<list>",
+            "national_holiday": "<list>",
+            "special_leave": "<list>",
+            "sick_leave": "<list>",
+            "holidays": "<int>",
+            "sick": "<int>",
+            "special leave": "<int>",
+            "national holiday": "<int>"
+        }
+    }
+}
+```
